@@ -9,15 +9,13 @@ type Children = Option<List<Node>>
 
 let rec depthFirstSearch = (node: Node, inList: List<String>) => {
 
-  let mut newList = List.append(inList, [node.name])
-  print("new list: " ++ toString(newList))
+  let mut newList: List<String> = List.append(inList, [node.name])
 
-  let nodeChildren = node.children
-
-  match (nodeChildren) {
-    Some(children) => List.forEach(c => depthFirstSearch(c, newList), children),
-    None => void,
+  match (node.children) {
+    Some(children) => List.map(c => depthFirstSearch(c, newList), children),
+    None => [],
   }
+  newList
 }
 
 let tree = {
