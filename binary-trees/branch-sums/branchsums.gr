@@ -1,0 +1,69 @@
+import Option from "option"
+import List from "list"
+
+record Tree {
+  value: Number,
+  left: BinaryTree,
+  right: BinaryTree,
+},
+type BinaryTree = Option<Tree>
+
+let rec internalCalc = (node, movingSum, sums) => {
+  let mut internalSum = movingSum
+
+  match (node) {
+    Some(n) => {
+      internalSum += Option.unwrap(node).value
+      match (n.left == None && n.right == None) {
+        true => List.append(sums, [internalSum]),
+        _ => sums,
+      }
+
+      internalCalc(Option.unwrap(node).left, internalSum, sums)
+      internalCalc(Option.unwrap(node).right, internalSum, sums)
+    },
+    None => internalSum,
+  }
+  internalSum
+}
+
+let branchSums = root => {
+  let mut sums = []
+  internalCalc(root, 0, sums)
+  sums
+}
+
+let tree = Some(
+  {
+    value: 1,
+    left: Some(
+      {
+        value: 2,
+        left: Some(
+          {
+            value: 4,
+            left: Some({ value: 8, left: None, right: None }),
+            right: Some({ value: 9, left: None, right: None }),
+          }
+        ),
+        right: Some(
+          {
+            value: 5,
+            left: Some({ value: 10, left: None, right: None }),
+            right: None,
+          }
+        ),
+      }
+    ),
+    right: Some(
+      {
+        value: 3,
+        left: Some({ value: 6, left: None, right: None }),
+        right: Some({ value: 7, left: None, right: None }),
+      }
+    ),
+  }
+)
+
+let sumsOfBranches = branchSums(tree)
+print(sumsOfBranches)
