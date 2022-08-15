@@ -1,0 +1,40 @@
+import List from "list"
+import Option from "option"
+
+record Node {
+  name: String,
+  mut children: Children,
+},
+type Children = Option<List<Node>>
+
+let rec depthFirstSearch = (node: Node, inList: List<String>) => {
+
+  let mut newList = List.append(inList, [node.name])
+  print("new list: " ++ toString(newList))
+
+  let nodeChildren = node.children
+
+  match (nodeChildren) {
+    Some(children) => List.forEach(c => depthFirstSearch(c, newList), children),
+    None => void,
+  }
+}
+
+let tree = {
+  name: "A",
+  children: Some(
+    [
+      {
+        name: "B",
+        children: Some(
+          [{ name: "E", children: None }, { name: "F", children: None }]
+        ),
+      },
+    ]
+  ),
+}
+
+let mut store = []
+let res = depthFirstSearch(tree, store)
+
+print(res)
