@@ -13,31 +13,19 @@ type BinaryTree struct {
 }
 
 func CalcNodeDepths(root *BinaryTree) int {
-	depthList := []int{}
-	counter := 0
-	internalCalc(root, counter, &depthList)
-
 	sum := 0
-	for _, v := range depthList {
-		sum += v
-	}
+	recursiveCalc(root, 0, &sum)
 	return sum
 }
 
-func internalCalc(node *BinaryTree, counter int, depthList *[]int) {
-
+func recursiveCalc(node *BinaryTree, depth int, sum *int) {
 	if node == nil {
 		return
 	}
-	counter += 1
 
-	if node.Left == nil && node.Right == nil {
-		*depthList = append(*depthList, counter)
-		return
-	}
-
-	internalCalc(node.Left, counter, depthList)
-	internalCalc(node.Right, counter, depthList)
+	*sum += depth
+	recursiveCalc(node.Left, depth+1, sum)
+	recursiveCalc(node.Right, depth+1, sum)
 }
 
 func main() {
