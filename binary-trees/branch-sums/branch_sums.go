@@ -18,18 +18,21 @@ func BranchSums(root *BinaryTree) []int {
 
 // calculate using the left and right node recursively.
 func calcBranchSums(node *BinaryTree, movingSum int, sums *[]int) {
+	// check if the node is nil.
+	// if it is, return because there is no where lower to go.
 	if node == nil {
 		return
 	}
 
 	movingSum += node.Value
+
 	if node.Left == nil && node.Right == nil {
 		*sums = append(*sums, movingSum)
 		return
 	}
+
 	calcBranchSums(node.Left, movingSum, sums)
 	calcBranchSums(node.Right, movingSum, sums)
-
 }
 
 func main() {
