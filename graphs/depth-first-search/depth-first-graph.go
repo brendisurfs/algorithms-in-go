@@ -7,11 +7,17 @@ type Node struct {
 	Children []*Node
 }
 
-func (node *Node) DepthFirstSearch(array []int) []string {
+func (node *Node) DepthFirstSearch(array *[]string) []string {
 	if node == nil {
 		return nil
 	}
-	return nil
+
+	*array = append(*array, node.Name)
+
+	for _, child := range node.Children {
+		child.DepthFirstSearch(array)
+	}
+	return *array
 }
 
 func main() {
@@ -39,5 +45,7 @@ func main() {
 		},
 	}
 
-	fmt.Printf("%#v\n", testNode)
+	store := []string{}
+	res := testNode.DepthFirstSearch(&store)
+	fmt.Println(res)
 }
