@@ -5,17 +5,21 @@ record Node {
   name: String,
   mut children: Children,
 },
-type Children = Option<List<Node>>
+type Children = Option<List<Option<Node>>>
 
-let rec depthFirstSearch = (node: Node, inList: List<String>) => {
+let successors = (node, edges) => {
+  let mapped = List.map(x => x, edges)
+  List.filter(n => n == node, mapped)
+}
 
-  let mut newList: List<String> = List.append(inList, [node.name])
-
-  match (node.children) {
-    Some(children) => List.map(c => depthFirstSearch(c, newList), children),
-    None => [],
+let dfs = (tree, start, fn) => {
+  let rec internalDFS = (visited, node) => {
+    if (!List.contains(node, visited)) {
+      fn(node)
+      let s = successors(node, tree)
+      let red = List.reduce(internalDFS(visited, node), visited, s)
+    }
   }
-  newList
 }
 
 let tree = {
@@ -33,6 +37,6 @@ let tree = {
 }
 
 let mut store = []
-let res = depthFirstSearch(tree, store)
+let res = dfs(tree)
 
 print(res)
