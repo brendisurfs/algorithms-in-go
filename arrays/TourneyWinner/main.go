@@ -1,6 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
+
+type Competitor struct {
+	Name  string
+	Score int
+}
 
 // given an array of pairs of team that competed against each other,
 // and the array containing results,
@@ -18,9 +26,26 @@ func TourneyWinner(competitions [][]string, results []int) string {
 		competitors[v] = 0
 	}
 
-	fmt.Println(competitors)
+	for j := range competitions {
+		if results[j] == 0 {
+			competitor := competitions[j][1]
+			competitors[competitor] += 1
+		}
+		if results[j] == 1 {
+			competitor := competitions[j][0]
+			competitors[competitor] += 1
+		}
+	}
 
-	return ""
+	var tourneyArr []Competitor
+	for k, v := range competitors {
+		tourneyArr = append(tourneyArr, Competitor{Name: k, Score: v})
+	}
+	sort.Slice(tourneyArr, func(i, j int) bool {
+		return tourneyArr[i].Score > tourneyArr[j].Score
+	})
+
+	return tourneyArr[0].Name
 }
 
 func main() {
@@ -34,5 +59,6 @@ func main() {
 
 	competitions = append(competitions, htmCSharp, csharpPython, pyHtml)
 
-	TourneyWinner(competitions, results)
+	winner := TourneyWinner(competitions, results)
+	fmt.Println(winner)
 }
