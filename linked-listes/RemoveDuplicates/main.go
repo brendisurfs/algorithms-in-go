@@ -13,7 +13,7 @@ type LinkedList struct {
 
 func (l *LinkedList) AddNode(value int) *LinkedList {
 	l.Next = &LinkedList{Value: value}
-	return l
+	return l.Next
 }
 
 func RemoveDuplicates(linkedList *LinkedList) *LinkedList {
