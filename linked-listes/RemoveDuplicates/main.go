@@ -1,9 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 )
 
 type LinkedList struct {
@@ -17,15 +15,17 @@ func (l *LinkedList) AddNode(value int) *LinkedList {
 }
 
 func RemoveDuplicates(linkedList *LinkedList) *LinkedList {
-	current := linkedList
+	currentNode := linkedList
+	nextNode := currentNode.Next
 
-	for current.Next != nil {
-		next := current.Next
-		if current.Value == next.Value {
-			next = next.Next
-			current = next
+	// tempNode := currentNode.Next.Next
+
+	for currentNode.Next != nil {
+		fmt.Printf("%+v\n", currentNode)
+		if currentNode.Value == nextNode.Value {
+			currentNode = currentNode.Next
 		}
-
+		currentNode = currentNode.Next
 	}
 	return nil
 }
@@ -33,9 +33,10 @@ func RemoveDuplicates(linkedList *LinkedList) *LinkedList {
 func main() {
 	testList := LinkedList{Value: 1}
 	testList.AddNode(3).AddNode(4).AddNode(4).AddNode(5).AddNode(6).AddNode(6)
-	fbytes, err := json.MarshalIndent(testList, "", " ")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(fbytes))
+	// fbytes, err := json.MarshalIndent(testList, "", " ")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	RemoveDuplicates(&testList)
+	// fmt.Println(string(fbytes))
 }
