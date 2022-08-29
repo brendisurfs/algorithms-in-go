@@ -21,7 +21,6 @@ func NonConstructibleChange(coins []int) int {
 	sort.Ints(coins)
 
 	for _, coin := range coins {
-		fmt.Printf("coin: %d, change: %d\n", coin, change)
 		if coin > change+1 {
 			return (change + 1)
 		}
