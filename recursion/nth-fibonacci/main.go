@@ -31,7 +31,7 @@ func GetNthFib(n int, store map[int]int) int {
 func IterNthFib(n int) int {
 
 	lastTwo := []int{0, 1}
-	counter := 2
+	counter := 3
 
 	for counter <= n {
 		next := lastTwo[0] + lastTwo[1]
