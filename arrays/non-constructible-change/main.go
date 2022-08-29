@@ -12,18 +12,20 @@ import (
 
 func main() {
 	coins := []int{5, 7, 1, 1, 2, 3, 22}
-	NonConstructibleChange(coins)
+	ncc := NonConstructibleChange(coins)
+	fmt.Println(ncc)
 }
 
 func NonConstructibleChange(coins []int) int {
+	change := 0
 	sort.Ints(coins)
 
-	change := 0
-
-	for i := range coins {
-		change += coins[i]
-		fmt.Println(change)
+	for _, coin := range coins {
+		fmt.Printf("coin: %d, change: %d\n", coin, change)
+		if coin > change+1 {
+			return (change + 1)
+		}
+		change += coin
 	}
-
 	return 0
 }
