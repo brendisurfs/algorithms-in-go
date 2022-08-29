@@ -1,20 +1,25 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
-	nth := GetNthFib(2)
+	nth := GetNthFib(9)
 	fmt.Println(nth)
 }
 
 func GetNthFib(n int) int {
+	store := make(map[int]int)
 
-	if n == 2 {
-		return 1
+	intSlice := []int{0, 1}
+
+	for i := 0; i <= n; i++ {
+		next := intSlice[0] + intSlice[1]
+		store[i] = next
+		intSlice[0] = intSlice[1]
+		intSlice[1] = next
 	}
 
-	if n == 1 {
-		return 0
-	}
-
+	return store[n]
 }
