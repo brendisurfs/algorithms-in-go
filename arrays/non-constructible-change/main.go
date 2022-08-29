@@ -26,5 +26,5 @@ func NonConstructibleChange(coins []int) int {
 		}
 		change += coin
 	}
-	return 0
+	return change + 1
 }
