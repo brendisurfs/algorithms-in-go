@@ -11,7 +11,7 @@ func main() {
 
 	tree.Insert(5)
 	contains := tree.Contains(12)
-	removedTree := tree.Remove(5, tree).ToPretty()
+	removedTree := tree.Remove(5).ToPretty()
 
 	fmt.Printf("%#v\n", contains)
 	fmt.Printf("%+v\n", removedTree)
@@ -62,7 +62,7 @@ func (tree *BST) Contains(value int) bool {
 // removal is a two step process.
 // 1. find the node
 // 2. Remove the node.
-func (tree *BST) Remove(value int, parentNode *BST) *BST {
+func (tree *BST) Remove(value int, parentNode ...*BST) *BST {
 
 	current := tree
 
