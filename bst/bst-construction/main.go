@@ -1,12 +1,20 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+)
 
 func main() {
-	tree := &BST{Value: 10, Left: nil, Right: nil}
+	tree := &BST{Value: 10}
 
-	doesTreeHave := tree.Contains(5)
-	fmt.Printf("%#v\n", doesTreeHave)
+	tree.Insert(5)
+	contains := tree.Contains(12)
+	removedTree := tree.Remove(5).ToPretty()
+
+	fmt.Printf("%#v\n", contains)
+	fmt.Printf("%+v\n", removedTree)
 }
 
 type BST struct {
@@ -15,41 +23,78 @@ type BST struct {
 	Right *BST
 }
 
+// Time: O(Log(N)) | Space: O(1)
 func (tree *BST) Insert(value int) *BST {
-	current := tree.Value
-	if value > current {
-		newTree := tree.Right
-		newTree.Insert(value)
+	current := tree
+	for {
+		if value > current.Value {
+			if current.Left == nil {
+				current.Left = &BST{Value: value}
+				break
+			} else {
+				current = current.Left
+			}
+		} else if current.Right == nil {
+			current.Right = &BST{Value: value}
+			break
+		} else {
+			current = current.Right
+		}
 	}
-	if value < current {
-		newTree := tree.Left
-		newTree.Insert(value)
-	}
-	tree.Value = value
 	return tree
 }
 
+// worst case Time: O(n) | Space: O(1)
 func (tree *BST) Contains(value int) bool {
-
-	if value < tree.Value {
-		newTreeLeft := tree.Left
-		newTreeLeft.Contains(value)
-	}
-
-	if value > tree.Value {
-		newTreeRight := tree.Right
-		newTreeRight.Contains(value)
-	}
-
-	if value == tree.Value {
-		return true
+	current := tree
+	for current != nil {
+		if value > current.Value {
+			current = current.Right
+		} else if value < current.Value {
+			current = current.Left
+		} else {
+			return true
+		}
 	}
 	return false
 }
 
-func (tree *BST) Remove(value int) *BST {
-	if tree.Left == nil && tree.Right == nil {
-		return tree
+// removal is a two step process.
+// 1. find the node
+// 2. Remove the node.
+func (tree *BST) Remove(value int, parentNode *BST) *BST {
+
+	current := tree
+
+	for current != nil {
+		if value > current.Value {
+			parentNode = current
+			current = current.Right
+		} else if value < current.Value {
+			parentNode = current
+			current = current.Left
+		} else {
+			if current.Left != nil && current.Right != nil {
+				// need to get rid of ALL the nodes after the node,
+				// not just that nodes value.
+				current.Value = current.Right.getMinValue()
+				current.Right.Remove(current.Value, current)
+			}
+		}
 	}
 	return tree
+}
+
+func (tree *BST) getMinValue() int {
+	fmt.Println("not implemented")
+	return -1
+}
+
+func (tree *BST) ToPretty() string {
+	parsed, err := json.MarshalIndent(tree, "", " ")
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+	return string(parsed)
 }
