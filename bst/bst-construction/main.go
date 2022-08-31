@@ -63,7 +63,6 @@ func (tree *BST) Contains(value int) bool {
 // 1. find the node
 // 2. Remove the node.
 func (tree *BST) Remove(value int, parentNode *BST) *BST {
-
 	current := tree
 
 	for current != nil {
@@ -79,6 +78,12 @@ func (tree *BST) Remove(value int, parentNode *BST) *BST {
 				// not just that nodes value.
 				current.Value = current.Right.getMinValue()
 				current.Right.Remove(current.Value, current)
+			} else if parentNode.Left == current {
+				if current != nil {
+					parentNode.Left = current.Left
+				} else {
+					parentNode.Left = current.Right
+				}
 			}
 		}
 	}
@@ -86,8 +91,11 @@ func (tree *BST) Remove(value int, parentNode *BST) *BST {
 }
 
 func (tree *BST) getMinValue() int {
-	fmt.Println("not implemented")
-	return -1
+	current := tree
+	for current.Left != nil {
+		current = current.Left
+	}
+	return current.Value
 }
 
 func (tree *BST) ToPretty() string {
